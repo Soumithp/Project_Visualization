@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Cholera Epidemic</title>
+    <script src="./d3/d3.js"></script>
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    <link rel=”stylesheet” href=”https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css”rel =”nofollow” integrity=”sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm” crossorigin=”anonymous”>
+    <style>
+        footer {
+            text-align: center;
+            padding: 5px;
+            background-color: #006064;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+            <div>
+
+        <li><a href="HTMLPage1.html">Documentation</a></li>
+
+        <li><a href="https://youtu.be/JZGWjBiuCoE"> Demo Video </a></li>
+
+            </div>
+
+    <h2 style="text-align: center; margin-bottom: 10px;">Cholera Epidemic</h2>
+    <div style="display: flex; flex-direction: row;">
+
+        <div style="flex-direction: column; margin-top: 20px;">
+            <svg id="stackbars" style="margin-left: 10%;"></svg>
+            <div style="text-align: center;">
+                <p id="grp"></p>
+                <p id="gen"></p>
+            </div>
+            <div id="timeline"></div>
+        </div>
+
+        <div style="flex-direction: column; width: 100%;">
+            <div style="flex-direction: row; margin-Top: 10px; align-items:center; justify-content: center; font-size: 12px;">
+                <div style="margin-top: 5px; justify-content: center; display: inline;">
+                    <div>
+                        <label for="deaths">Map Deaths by:</label>
+                        <label style="margin-left: 15%;">Zoom:</label>
+                        <label style="margin-left: 6%;">Legends:</label>
+                    </div>
+
+                    <span>
+                        <input type="radio" id="lct" class="fRadio" name="cat_distribution" value="location"
+                               onclick="handleRadioChange(this.value)" style="width: 10px; height:10px;" checked>
+                        <label for="lct">Location</label>
+                    </span>
+                    <span>
+                        <input type="radio" id="gen" class="fRadio" name="cat_distribution" onclick="handleRadioChange(this.value)"
+                               style="width: 10px; height:10px;" value="gender">
+                        <label for="gen">Gender</label>
+                    </span>
+                    <span>
+                        <input type="radio" id="ag" class="fRadio" name="cat_distribution" onclick="handleRadioChange(this.value)"
+                               style="width: 10px; height:10px;" value="age">
+                        <label for="ag">Age</label>
+                    </span>
+
+                    <span>
+                        <div style="display: inline; margin-left: 3%;">
+                            <button type="button" id="plus">+</button>
+                            <button type="button" id="minus" style="width: 25px;">-</button>
+                        </div>
+                    </span>
+
+                    <span id="locations">
+                        <div style="display: inline; margin-left: 4%;">
+                            <span style="margin-top: 10px; color: red; font-weight: bolder;">L</span>
+                            <span style="vertical-align: center;">Location</span>
+                        </div>
+                    </span>
+
+                    <span id="genders" style="display: none;">
+                        <div style="display: inline; margin-left: 4%;">
+                            <span style="margin-top: 10px; color: blue; font-weight: bolder;">M</span>
+                            <span style="vertical-align: center;">Male</span>
+                        </div>
+                        <div style="display: inline; margin-left: 3%;">
+                            <span style="margin-top: 10px; color: green; font-weight: bolder;">F</span>
+                            <span style="vertical-align: center;">Female</span>
+                        </div>
+                    </span>
+
+                    <span id="ages" style="display: none; margin-top: 5px;">
+                        <div style="display: inline; margin-left: 4%;">
+                            <span style="margin-top: 10px; color: red" ; font-weight: bolder;">0</span>
+                            <span style="vertical-align: center;">0-10</span>
+                        </div>
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color:pink; font-weight: bolder;">1</span>
+                            <span style="vertical-align: center;">11-20</span>
+                        </div>
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color: yellow; font-weight: bolder;">2</span>
+                            <span style="vertical-align: center;">21-40</span>
+                        </div>
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color: purple; font-weight: bolder;">3</span>
+                            <span style="vertical-align: center;">41-60</span>
+                        </div>
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color: brown; font-weight: bolder;">4</span>
+                            <span style="vertical-align: center;">61-80</span>
+                        </div>
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color: chocolate; font-weight: bolder;">5</span>
+                            <span style="vertical-align: center;">>80</span>
+                        </div>
+                    </span>
+
+                    <span id="streets" style="display: inline; margin-top: 5px;">
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color: rgb(0, 255, 4); font-weight: bolder;">B</span>
+                            <span style="vertical-align: center;">Brewery</span>
+                        </div>
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color: orange; font-weight: bolder;">WH</span>
+                            <span style="vertical-align: center;">Work House</span>
+                        </div>
+                        <div style="display: inline; margin-left: 2%;">
+                            <span style="margin-top: 10px; color: skyblue; font-weight: bolder;">P</span>
+                            <span style="vertical-align: center;">Pumps</span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div id="map" style="margin-top:20px;"></div>
+        </div>
+    </div>
+
+    <script src="./js/radial.js"></script>
+    <script src="./js/mapPaths.js"></script>
+    <script src="./js/lineGraph.js"></script>
+    <script src="./js/radialBarChart.js"></script>
+
+
+    <div>
+        <footer class="footer-bottom"style="background-color: #006064;">
+    <!-- Grid container -->
+    <div class="container p-4"></div>
+    <!-- Grid container -->
+    <!-- Copyright -->
+    <div class="text-center p-1" style="background-color: #006064;">
+        ©Copyright: Soumith Paritala
+           <a class="text-black" href="sparital@iu.edu"></a>
+    </div>
+    <!-- Copyright -->
+        </footer>
+    </div>
+
+
+
+
+
+
+   
+</body>
